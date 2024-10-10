@@ -9,6 +9,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { DataSource } from 'typeorm';
+import { CurriculumModule } from './curriculum/curriculum.module';
+import { ContentModule } from './content/content.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { DataSource } from 'typeorm';
         return dataSource;
       },
     }),
+    CurriculumModule,
+    ContentModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver],
