@@ -6,7 +6,7 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { AppResolver } from './app.resolver';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { DataSource } from 'typeorm';
 import { CurriculumModule } from './curriculum/curriculum.module';
@@ -26,19 +26,24 @@ import { ContentModule } from './content/content.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: configService.get<'mysql' | 'postgres'>('DB_TYPE'),
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
-        logging: ['error', 'query'],
-        namingStrategy: new SnakeNamingStrategy(),
-      }),
+      useFactory: (configService: ConfigService) =>
+        ({
+          type: configService.get<'mysql' | 'postgres'>('DB_TYPE'),
+          host: configService.get<string>('DB_HOST'),
+          port: configService.get<number>('DB_PORT'),
+          username: configService.get<string>('DB_USERNAME'),
+          password: configService.get<string>('DB_PASSWORD'),
+          database: configService.get<string>('DB_DATABASE'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: false,
+          logging: ['error', 'query'],
+          namingStrategy: new SnakeNamingStrategy(),
+        } as TypeOrmModuleOptions), // 타입오류로 인한 캐스팅
       dataSourceFactory: async (options) => {
+        if (!options) {
+          throw new Error('db options not defined');
+        }
+
         const dataSource = await new DataSource(options).initialize();
         return dataSource;
       },
