@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CurriculumSnapshotEntity } from './curriculum-snapshot.entity';
-import { EducationalContentSnapshotEntity } from 'src/content/modules/educational-content/entities/educational-content-snapshot.entity';
+import { EducationalContentSnapshotEntity } from 'src/curriculum/modules/educational-content/entities/educational-content-snapshot.entity';
 
 @Entity('curriculum_snapshot_educational_content_snapshots')
 export class CurriculumSnapshotEducationalContentSnapshotEntity {

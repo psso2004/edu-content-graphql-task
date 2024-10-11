@@ -5,6 +5,7 @@ import { CurriculumSnapshotEntity } from './entities/curriculum-snapshot.entity'
 import { CurriculumSnapshotEducationalContentSnapshotEntity } from './entities/curriculum-snapshot-educational-content-snapshot.entity';
 import { CurriculumResolver } from './curriculum.resolver';
 import { CurriculumSnapshotResolver } from './curriculum-snapshot.resolver';
+import { EducationalContentModule } from "./modules/educational-content/educational-content.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CurriculumSnapshotResolver } from './curriculum-snapshot.resolver';
       CurriculumSnapshotEntity,
       CurriculumSnapshotEducationalContentSnapshotEntity,
     ]),
+    EducationalContentModule,
   ],
   providers: [CurriculumResolver, CurriculumSnapshotResolver],
 })
