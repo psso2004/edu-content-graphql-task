@@ -1,9 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { EducationalContentSnapshotEntity } from '../../entities/educational-content-snapshot.entity';
+import { CurriculumSnapshotEntity } from 'src/curriculum/entities/curriculum-snapshot.entity';
 
 @ObjectType()
-export class EducationalContentSnapshotOutput {
-  constructor(private readonly _entity: EducationalContentSnapshotEntity) {}
+export class CurriculumSnapshotOutput {
+  constructor(private readonly _entity: CurriculumSnapshotEntity) {}
 
   @Field(() => Int)
   get id(): number {

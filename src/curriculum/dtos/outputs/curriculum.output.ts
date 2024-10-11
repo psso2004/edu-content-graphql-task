@@ -1,12 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { EducationalContentEntity } from '../../entities/educational-content.entity';
-import { EducationalContentSnapshotEntity } from '../../entities/educational-content-snapshot.entity';
+import { CurriculumSnapshotEntity } from 'src/curriculum/entities/curriculum-snapshot.entity';
+import { CurriculumEntity } from 'src/curriculum/entities/curriculum.entity';
 
 @ObjectType()
-export class EducationalContentOutput {
+export class CurriculumOutput {
   constructor(
-    private readonly _entity: EducationalContentEntity,
-    private readonly _latestSnapshotEntity: EducationalContentSnapshotEntity,
+    private readonly _entity: CurriculumEntity,
+    private readonly _latestSnapshotEntity: CurriculumSnapshotEntity,
   ) {}
 
   @Field(() => Int)

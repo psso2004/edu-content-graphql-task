@@ -1,8 +1,6 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 
 /**
- * EducationalContentArgs 클래스
- *
  * 이 클래스는 `educationalContent` 쿼리에서 사용되는 인수 객체입니다.
  *
  * `educationalContent` 쿼리는 특정 교육 콘텐츠를 조회할 때 사용되며,

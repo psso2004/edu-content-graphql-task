@@ -1,16 +1,8 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
+import { CreateEducationalContentInput } from './create-educational-content.input';
 
 @InputType()
-export class UpdateEducationalContentInput {
+export class UpdateEducationalContentInput extends CreateEducationalContentInput {
   @Field(() => Int)
   id: number;
-
-  @Field(() => String, { nullable: true })
-  title: string | null;
-
-  @Field(() => String, { nullable: true })
-  descrtion: string | null;
-
-  @Field(() => String, { nullable: true })
-  content: string | null;
 }

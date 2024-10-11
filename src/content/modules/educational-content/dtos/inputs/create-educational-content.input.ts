@@ -6,7 +6,7 @@ export class CreateEducationalContentInput {
   title: string;
 
   @Field(() => String)
-  descrtion: string;
+  description: string;
 
   @Field(() => String)
   content: string;
