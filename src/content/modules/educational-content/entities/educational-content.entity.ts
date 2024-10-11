@@ -38,7 +38,7 @@ export class EducationalContentEntity {
   @OneToMany(
     () => EducationalContentSnapshotEntity,
     (snapshot) => snapshot.educationalContent,
-    { cascade: ['insert'] },
+    { cascade: ['insert', 'soft-remove'] },
   )
   educationalContentSnapshots: EducationalContentSnapshotEntity[];
   /**
