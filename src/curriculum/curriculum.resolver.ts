@@ -50,6 +50,11 @@ export class CurriculumResolver {
     return true;
   }
 
+  @ResolveField(() => CurriculumSnapshotOutput)
+  async latestSnapshot(): Promise<CurriculumSnapshotOutput> {
+    return {} as CurriculumSnapshotOutput;
+  }
+
   @ResolveField(() => [CurriculumSnapshotOutput])
   async snapshots(
     @Args() args: CurriculumSnapshotsArgs,

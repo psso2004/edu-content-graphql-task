@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { CurriculumSnapshotEntity } from 'src/curriculum/entities/curriculum-snapshot.entity';
+import { EducationalContentSnapshotOutput } from 'src/curriculum/modules/educational-content/dtos/outputs/educational-content-snapshot.output';
 
 @ObjectType()
 export class CurriculumSnapshotOutput {
@@ -29,4 +30,7 @@ export class CurriculumSnapshotOutput {
   get createdAt(): Date {
     return this._entity.createdAt;
   }
+
+  @Field(() => [EducationalContentSnapshotOutput])
+  educationalContentSnapshots: EducationalContentSnapshotOutput[];
 }
