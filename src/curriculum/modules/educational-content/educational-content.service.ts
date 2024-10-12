@@ -8,7 +8,7 @@ import {
   DeepPartial,
   EntityManager,
   FindManyOptions,
-  FindOneOptions,
+  FindOptionsWhere,
 } from 'typeorm';
 import { EducationalContentEntity } from './entities/educational-content.entity';
 import { EducationalContentSnapshotEntity } from './entities/educational-content-snapshot.entity';
@@ -20,11 +20,11 @@ export class EducationalContentService {
   // (공통) EntityManager가 주입되지 않을 경우, 기본 EntityManager를 생성합니다.
   // 이 매개변수는 트랜잭션 내에서 사용되며, 여러 작업을 하나의 트랜잭션으로 묶어야 할 때 사용됩니다.
   getEducationalContent(
-    options: FindOneOptions<EducationalContentEntity>,
+    where: FindOptionsWhere<EducationalContentEntity>,
     entityManager?: EntityManager,
   ): Promise<EducationalContentEntity | null> {
     const em = entityManager ?? this.dataSource.createEntityManager();
-    return em.findOne(EducationalContentEntity, options);
+    return em.findOneBy(EducationalContentEntity, where);
   }
 
   getEducationalContents(
@@ -57,11 +57,7 @@ export class EducationalContentService {
         updateData;
 
       const educationalContent = await this.getEducationalContent(
-        {
-          where: {
-            id,
-          },
-        },
+        { id },
         transactionalEntityManager,
       );
       if (!educationalContent || educationalContent === null) {

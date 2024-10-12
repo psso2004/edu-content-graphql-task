@@ -25,20 +25,15 @@ export class EducationalContentResolver {
     // todo: count 기능 추가해야됨.
     const [educationalContents] = await Promise.all([
       this.educationalContentService.getEducationalContents({
-        relations: ['educationalContentSnapshots'],
         skip: (page - 1) * limit,
         take: limit,
       }),
     ]);
 
     // todo: paginated 객체로 반환하도록 수정해야됨.
-    return educationalContents.map((educationalContent) => {
-      const latestSnapshot =
-        educationalContent.educationalContentSnapshots.at(-1);
-      if (!latestSnapshot)
-        throw new NotFoundException('not found latest snapshot');
-      return new EducationalContentOutput(educationalContent, latestSnapshot);
-    });
+    return educationalContents.map(
+      (educationalContent) => new EducationalContentOutput(educationalContent),
+    );
   }
 
   @Query(() => EducationalContentOutput, { nullable: true })
@@ -48,24 +43,12 @@ export class EducationalContentResolver {
     const { id } = args;
 
     const educationalContent =
-      await this.educationalContentService.getEducationalContent({
-        where: {
-          id,
-        },
-        relations: ['educationalContentSnapshots'],
-        order: {
-          educationalContentSnapshots: {
-            createdAt: 'DESC',
-          },
-        },
-      });
+      await this.educationalContentService.getEducationalContent({ id });
     if (educationalContent === null) {
       throw new NotFoundException('not found educationalContent');
     }
 
-    const latestSnapshot = educationalContent?.educationalContentSnapshots[0];
-
-    return new EducationalContentOutput(educationalContent, latestSnapshot);
+    return new EducationalContentOutput(educationalContent);
   }
 
   @Mutation(() => EducationalContentOutput)
@@ -76,8 +59,7 @@ export class EducationalContentResolver {
       await this.educationalContentService.createEducationalContent({
         educationalContentSnapshots: [input],
       });
-    const latestSnapshot = educationalContent.educationalContentSnapshots[0];
-    return new EducationalContentOutput(educationalContent, latestSnapshot);
+    return new EducationalContentOutput(educationalContent);
   }
 
   @Mutation(() => EducationalContentOutput)
@@ -91,9 +73,8 @@ export class EducationalContentResolver {
         id,
         educationalContentSnapshots: [updateInput],
       });
-    const latestSnapshot = educationalContent.educationalContentSnapshots[0];
 
-    return new EducationalContentOutput(educationalContent, latestSnapshot);
+    return new EducationalContentOutput(educationalContent);
   }
 
   @Mutation(() => Boolean)
@@ -103,6 +84,12 @@ export class EducationalContentResolver {
     const { id } = input;
     await this.educationalContentService.deleteEducationalContent(id);
     return true;
+  }
+
+  @ResolveField(() => EducationalContentSnapshotOutput)
+  async latestSnapshot(): Promise<EducationalContentSnapshotOutput> {
+    // todo: dataloader 적용예정.
+    return {} as EducationalContentSnapshotOutput;
   }
 
   @ResolveField(() => [EducationalContentSnapshotOutput])
