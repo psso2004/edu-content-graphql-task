@@ -5,6 +5,7 @@ import { EducationalContentSnapshotEntity } from './entities/educational-content
 import { EducationalContentResolver } from './educational-content.resolver';
 import { EducationalContentService } from './educational-content.service';
 import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
+import { SnapshotsLoader } from './loaders/snapshots.loader';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
      * === dataloaders ===
      */
     LatestSnapshotLoader,
+    SnapshotsLoader,
   ],
 })
 export class EducationalContentModule {}

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { EducationalContentService } from '../educational-content.service';
 import { EducationalContentSnapshotEntity } from '../entities/educational-content-snapshot.entity';
-import { In } from 'typeorm';
 
 @Injectable()
 export class LatestSnapshotLoader extends DataLoader<

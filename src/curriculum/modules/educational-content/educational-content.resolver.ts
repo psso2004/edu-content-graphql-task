@@ -17,12 +17,14 @@ import { DeleteEducationalContentInput } from './dtos/inputs/delete-educational-
 import { EducationalContentService } from './educational-content.service';
 import { NotFoundException } from '@nestjs/common';
 import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
+import { SnapshotsLoader } from './loaders/snapshots.loader';
 
 @Resolver(() => EducationalContentOutput)
 export class EducationalContentResolver {
   constructor(
     private readonly educationalContentService: EducationalContentService,
     private readonly latestSnapshotLoader: LatestSnapshotLoader,
+    private readonly snapshotsLoader: SnapshotsLoader,
   ) {}
 
   @Query(() => [EducationalContentOutput])
@@ -107,9 +109,18 @@ export class EducationalContentResolver {
   @ResolveField(() => [EducationalContentSnapshotOutput])
   async snapshots(
     @Args() args: EducationalContentSnapshotsArgs,
+    @Parent() parent: EducationalContentOutput,
   ): Promise<EducationalContentSnapshotOutput[]> {
-    args;
-    // todo: dataloader 적용예정.
-    return [];
+    const { id } = args;
+
+    const snapshots = await this.snapshotsLoader.load(parent.id);
+    const convertedSnapshots = snapshots.map(
+      (snapshot) => new EducationalContentSnapshotOutput(snapshot),
+    );
+    if (id && id !== null) {
+      return convertedSnapshots.filter((snapshot) => snapshot.id === id);
+    }
+
+    return convertedSnapshots;
   }
 }
