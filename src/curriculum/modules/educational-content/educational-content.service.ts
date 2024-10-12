@@ -35,6 +35,14 @@ export class EducationalContentService {
     return em.find(EducationalContentEntity, options);
   }
 
+  getEducationalContentSnapshots(
+    options: FindManyOptions<EducationalContentSnapshotEntity> = {},
+    entityManager?: EntityManager,
+  ): Promise<EducationalContentSnapshotEntity[]> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+    return em.find(EducationalContentSnapshotEntity, options);
+  }
+
   createEducationalContent(
     createData: DeepPartial<EducationalContentEntity>,
     entityManager?: EntityManager,

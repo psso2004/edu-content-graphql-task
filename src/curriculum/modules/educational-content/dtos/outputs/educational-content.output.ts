@@ -16,7 +16,7 @@ export class EducationalContentOutput {
     return this._entity.createdAt;
   }
 
-  @Field(() => EducationalContentSnapshotOutput)
+  @Field(() => EducationalContentSnapshotOutput, { nullable: true })
   latestSnapshot: EducationalContentSnapshotOutput;
 
   @Field(() => [EducationalContentSnapshotOutput])

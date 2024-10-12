@@ -1,4 +1,11 @@
-import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { EducationalContentOutput } from './dtos/outputs/educational-content.output';
 import { EducationalContentSnapshotOutput } from './dtos/outputs/educational-content-snapshot.output';
 import { EducationalContentSnapshotsArgs } from './dtos/args/educational-content-snapshots.args';
@@ -9,11 +16,13 @@ import { UpdateEducationalContentInput } from './dtos/inputs/update-educational-
 import { DeleteEducationalContentInput } from './dtos/inputs/delete-educational-content.input';
 import { EducationalContentService } from './educational-content.service';
 import { NotFoundException } from '@nestjs/common';
+import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
 
 @Resolver(() => EducationalContentOutput)
 export class EducationalContentResolver {
   constructor(
     private readonly educationalContentService: EducationalContentService,
+    private readonly latestSnapshotLoader: LatestSnapshotLoader,
   ) {}
 
   @Query(() => [EducationalContentOutput])
@@ -86,10 +95,13 @@ export class EducationalContentResolver {
     return true;
   }
 
-  @ResolveField(() => EducationalContentSnapshotOutput)
-  async latestSnapshot(): Promise<EducationalContentSnapshotOutput> {
-    // todo: dataloader 적용예정.
-    return {} as EducationalContentSnapshotOutput;
+  @ResolveField(() => EducationalContentSnapshotOutput, { nullable: true })
+  async latestSnapshot(
+    @Parent() parent: EducationalContentOutput,
+  ): Promise<EducationalContentSnapshotOutput | null> {
+    const latestSnapshot = await this.latestSnapshotLoader.load(parent.id);
+    if (latestSnapshot === null) return null;
+    return new EducationalContentSnapshotOutput(latestSnapshot);
   }
 
   @ResolveField(() => [EducationalContentSnapshotOutput])

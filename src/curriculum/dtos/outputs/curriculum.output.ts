@@ -16,7 +16,7 @@ export class CurriculumOutput {
     return this._entity.createdAt;
   }
 
-  @Field(() => CurriculumSnapshotOutput)
+  @Field(() => CurriculumSnapshotOutput, { nullable: true })
   latestSnapshot: CurriculumSnapshotOutput;
 
   @Field(() => [CurriculumSnapshotOutput])
