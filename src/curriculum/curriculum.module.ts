@@ -9,6 +9,7 @@ import { EducationalContentModule } from './modules/educational-content/educatio
 import { CurriculumService } from './curriculum.service';
 import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
 import { SnapshotsLoader } from './loaders/snapshots.loader';
+import { EducationalContentSnapshotsLoader } from './loaders/education-content-snapshots.loader';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SnapshotsLoader } from './loaders/snapshots.loader';
      */
     LatestSnapshotLoader,
     SnapshotsLoader,
+    EducationalContentSnapshotsLoader,
   ],
 })
 export class CurriculumModule {}
