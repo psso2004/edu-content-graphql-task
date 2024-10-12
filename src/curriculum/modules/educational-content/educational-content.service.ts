@@ -50,42 +50,68 @@ export class EducationalContentService {
   ): Promise<EducationalContentEntity> {
     const em = entityManager ?? this.dataSource.createEntityManager();
 
-    const { id, ...filteredUpdateData } = updateData;
-    const educationalContent = await this.getEducationalContent(
-      {
-        where: {
-          id,
+    const updateEducationalContentInternal = async (
+      transactionalEntityManager: EntityManager,
+    ) => {
+      const { id, educationalContentSnapshots, ...filteredUpdateData } =
+        updateData;
+
+      const educationalContent = await this.getEducationalContent(
+        {
+          where: {
+            id,
+          },
         },
-      },
-      em,
-    );
-    if (!educationalContent || educationalContent === null) {
-      throw new NotFoundException('educationContent not found');
+        transactionalEntityManager,
+      );
+      if (!educationalContent || educationalContent === null) {
+        throw new NotFoundException('educationContent not found');
+      }
+
+      transactionalEntityManager.merge(
+        EducationalContentEntity,
+        educationalContent,
+        filteredUpdateData,
+      );
+      await transactionalEntityManager.save(
+        EducationalContentEntity,
+        educationalContent,
+      );
+
+      if (
+        !educationalContentSnapshots ||
+        educationalContentSnapshots.length <= 0
+      ) {
+        throw new BadRequestException('undefined educationalContentSnapshots');
+      }
+
+      const snapshotEntity = transactionalEntityManager.create(
+        EducationalContentSnapshotEntity,
+        Object.assign(educationalContentSnapshots[0], {
+          educationalContentId: id,
+        }),
+      );
+      const educationalContentSnapshot = await transactionalEntityManager.save(
+        EducationalContentSnapshotEntity,
+        snapshotEntity,
+      );
+      educationalContent.educationalContentSnapshots = [
+        educationalContentSnapshot,
+      ];
+
+      return educationalContent;
+    };
+
+    // 외부에서 주입된 EntityManager가 있을 경우, 트랜잭션을 사용하지 않음
+    if (entityManager) {
+      return await updateEducationalContentInternal(em);
+    } else {
+      return await em.transaction(async (transactionalEntityManager) => {
+        return await updateEducationalContentInternal(
+          transactionalEntityManager,
+        );
+      });
     }
-
-    const { educationalContentSnapshots } = filteredUpdateData;
-    if (
-      !educationalContentSnapshots ||
-      educationalContentSnapshots.length <= 0
-    ) {
-      throw new BadRequestException('undefined educationalContentSnapshots');
-    }
-
-    const snapshotEntity = em.create(
-      EducationalContentSnapshotEntity,
-      Object.assign(educationalContentSnapshots[0], {
-        educationalContentId: id,
-      }),
-    );
-    const educationalContentSnapshot = await em.save(
-      EducationalContentSnapshotEntity,
-      snapshotEntity,
-    );
-    educationalContent.educationalContentSnapshots = [
-      educationalContentSnapshot,
-    ];
-
-    return educationalContent;
   }
 
   async deleteEducationalContent(
