@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EducationalContentEntity } from './entities/educational-content.entity';
 import { EducationalContentSnapshotEntity } from './entities/educational-content-snapshot.entity';
 import { EducationalContentResolver } from './educational-content.resolver';
+import { EducationalContentService } from './educational-content.service';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { EducationalContentResolver } from './educational-content.resolver';
       EducationalContentSnapshotEntity,
     ]),
   ],
-  providers: [EducationalContentResolver],
+  providers: [EducationalContentResolver, EducationalContentService],
 })
 export class EducationalContentModule {}
