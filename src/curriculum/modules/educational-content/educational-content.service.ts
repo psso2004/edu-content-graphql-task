@@ -53,14 +53,13 @@ export class EducationalContentService {
       .where(
         `snapshot.id IN (${em
           .createQueryBuilder(EducationalContentSnapshotEntity, 'innerSnapshot')
-          .select('innerSnapshot.id')
+          .select('MAX(innerSnapshot.id)')
           .where(
             `innerSnapshot.educationalContentId IN (${educationalContentIds.join(
               ',',
             )})`,
           )
           .groupBy('innerSnapshot.educationalContentId')
-          .orderBy('innerSnapshot.id', 'DESC')
           .getQuery()})`,
       )
       .getMany();
