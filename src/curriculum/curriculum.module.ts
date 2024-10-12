@@ -6,6 +6,7 @@ import { CurriculumSnapshotEducationalContentSnapshotEntity } from './entities/c
 import { CurriculumResolver } from './curriculum.resolver';
 import { CurriculumSnapshotResolver } from './curriculum-snapshot.resolver';
 import { EducationalContentModule } from './modules/educational-content/educational-content.module';
+import { CurriculumService } from './curriculum.service';
 
 @Module({
   imports: [
@@ -16,6 +17,16 @@ import { EducationalContentModule } from './modules/educational-content/educatio
     ]),
     EducationalContentModule,
   ],
-  providers: [CurriculumResolver, CurriculumSnapshotResolver],
+  providers: [
+    /**
+     * === resolvers ===
+     */
+    CurriculumResolver,
+    CurriculumSnapshotResolver,
+    /**
+     * === services ===
+     */
+    CurriculumService,
+  ],
 })
 export class CurriculumModule {}

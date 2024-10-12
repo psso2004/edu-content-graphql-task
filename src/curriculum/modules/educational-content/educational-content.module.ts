@@ -29,5 +29,6 @@ import { SnapshotsLoader } from './loaders/snapshots.loader';
     LatestSnapshotLoader,
     SnapshotsLoader,
   ],
+  exports: [EducationalContentService],
 })
 export class EducationalContentModule {}

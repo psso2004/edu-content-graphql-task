@@ -22,7 +22,7 @@ export class CreateCurriculumInput {
 }
 
 @InputType()
-class CurriculumEducationalContentInput {
+export class CurriculumEducationalContentInput {
   @Field(() => Int)
   id: number;
 }

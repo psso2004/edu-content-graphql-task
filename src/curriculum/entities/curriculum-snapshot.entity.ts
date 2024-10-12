@@ -48,6 +48,7 @@ export class CurriculumSnapshotEntity {
     () => CurriculumSnapshotEducationalContentSnapshotEntity,
     (curriculumSnapshotEducationalContentSnapshot) =>
       curriculumSnapshotEducationalContentSnapshot.curriculumSnapshot,
+    { cascade: ['insert'] },
   )
   curriculumSnapshotEducationalContentSnapshots: CurriculumSnapshotEducationalContentSnapshotEntity[];
 

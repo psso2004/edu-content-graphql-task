@@ -28,7 +28,7 @@ export class CurriculumEntity {
   @OneToMany(
     () => CurriculumSnapshotEntity,
     (snapshot) => snapshot.curriculum,
-    { cascade: ['insert', 'soft-remove'] },
+    { cascade: ['insert'] },
   )
   curriculumSnapshots: CurriculumSnapshotEntity[];
   /**
