@@ -35,6 +35,32 @@ export class CurriculumService {
     return em.find(CurriculumEntity, options);
   }
 
+  getCurriculumSnapshots(
+    options: FindManyOptions<CurriculumSnapshotEntity> = {},
+    entityManager?: EntityManager,
+  ): Promise<CurriculumSnapshotEntity[]> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+    return em.find(CurriculumSnapshotEntity, options);
+  }
+
+  getUniqueCurriculumSnapshots(
+    curriculumIds: number[],
+    entityManager?: EntityManager,
+  ): Promise<CurriculumSnapshotEntity[]> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+    return em
+      .createQueryBuilder(CurriculumSnapshotEntity, 'snapshot')
+      .where(
+        `snapshot.id IN (${em
+          .createQueryBuilder(CurriculumSnapshotEntity, 'innerSnapshot')
+          .select('MAX(innerSnapshot.id)')
+          .where(`innerSnapshot.curriculumId IN (${curriculumIds.join(',')})`)
+          .groupBy('innerSnapshot.curriculumId')
+          .getQuery()})`,
+      )
+      .getMany();
+  }
+
   createCurriculum(
     createData: DeepPartial<CurriculumEntity>,
     entityManager?: EntityManager,

@@ -1,4 +1,11 @@
-import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CurriculumOutput } from './dtos/outputs/curriculum.output';
 import { CurriculumsArgs } from './dtos/args/curriculums.args';
 import { CurriculumArgs } from './dtos/args/curriculum.args';
@@ -14,12 +21,16 @@ import { CurriculumService } from './curriculum.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { EducationalContentService } from './modules/educational-content/educational-content.service';
 import { EducationalContentSnapshotEntity } from './modules/educational-content/entities/educational-content-snapshot.entity';
+import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
+import { SnapshotsLoader } from './loaders/snapshots.loader';
 
 @Resolver(() => CurriculumOutput)
 export class CurriculumResolver {
   constructor(
     private readonly curriculumService: CurriculumService,
     private readonly educationalContentService: EducationalContentService,
+    private readonly latestSnapshotLoader: LatestSnapshotLoader,
+    private readonly snapshotsLoader: SnapshotsLoader,
   ) {}
 
   @Query(() => [CurriculumOutput])
@@ -111,17 +122,31 @@ export class CurriculumResolver {
     return true;
   }
 
-  @ResolveField(() => CurriculumSnapshotOutput)
-  async latestSnapshot(): Promise<CurriculumSnapshotOutput> {
-    return {} as CurriculumSnapshotOutput;
+  @ResolveField(() => CurriculumSnapshotOutput, { nullable: true })
+  async latestSnapshot(
+    @Parent() parent: CurriculumOutput,
+  ): Promise<CurriculumSnapshotOutput | null> {
+    const latestSnapshot = await this.latestSnapshotLoader.load(parent.id);
+    if (latestSnapshot === null) return null;
+    return new CurriculumSnapshotOutput(latestSnapshot);
   }
 
   @ResolveField(() => [CurriculumSnapshotOutput])
   async snapshots(
     @Args() args: CurriculumSnapshotsArgs,
+    @Parent() parent: CurriculumOutput,
   ): Promise<CurriculumSnapshotOutput[]> {
-    args;
-    return [];
+    const { id } = args;
+
+    const snapshots = await this.snapshotsLoader.load(parent.id);
+    const convertedSnapshots = snapshots.map(
+      (snapshot) => new CurriculumSnapshotOutput(snapshot),
+    );
+    if (id && id !== null) {
+      return convertedSnapshots.filter((snapshot) => snapshot.id === id);
+    }
+
+    return convertedSnapshots;
   }
 
   private async getEducationalContentSnapshots(
