@@ -17,19 +17,19 @@ export class LatestSnapshotLoader extends DataLoader<
         educationalContentIds: number[],
       ): Promise<(EducationalContentSnapshotEntity | null)[]> => {
         const snapshots =
-          await this.educationalContentService.getEducationalContentSnapshots({
-            where: {
-              educationalContentId: In(educationalContentIds),
-            },
-            order: {
-              createdAt: 'DESC',
-            },
-          });
+          await this.educationalContentService.getUniqueEducationalContentSnapshots(
+            educationalContentIds,
+          );
 
         const snapshotMap = new Map<number, EducationalContentSnapshotEntity>();
-        snapshotMap.set(snapshots[0].educationalContentId, snapshots[0]);
+        snapshots.forEach((snapshot) =>
+          snapshotMap.set(snapshot.educationalContentId, snapshot),
+        );
 
-        return educationalContentIds.map((key) => snapshotMap.get(key) || null);
+        return educationalContentIds.map(
+          (educationalContentId) =>
+            snapshotMap.get(educationalContentId) || null,
+        );
       },
       { cache: false },
     );

@@ -43,6 +43,29 @@ export class EducationalContentService {
     return em.find(EducationalContentSnapshotEntity, options);
   }
 
+  getUniqueEducationalContentSnapshots(
+    educationalContentIds: number[],
+    entityManager?: EntityManager,
+  ): Promise<EducationalContentSnapshotEntity[]> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+    return em
+      .createQueryBuilder(EducationalContentSnapshotEntity, 'snapshot')
+      .where(
+        `snapshot.id IN (${em
+          .createQueryBuilder(EducationalContentSnapshotEntity, 'innerSnapshot')
+          .select('innerSnapshot.id')
+          .where(
+            `innerSnapshot.educationalContentId IN (${educationalContentIds.join(
+              ',',
+            )})`,
+          )
+          .groupBy('innerSnapshot.educationalContentId')
+          .orderBy('innerSnapshot.id', 'DESC')
+          .getQuery()})`,
+      )
+      .getMany();
+  }
+
   createEducationalContent(
     createData: DeepPartial<EducationalContentEntity>,
     entityManager?: EntityManager,
