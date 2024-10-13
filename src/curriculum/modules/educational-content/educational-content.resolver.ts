@@ -16,15 +16,15 @@ import { UpdateEducationalContentInput } from './dtos/inputs/update-educational-
 import { DeleteEducationalContentInput } from './dtos/inputs/delete-educational-content.input';
 import { EducationalContentService } from './educational-content.service';
 import { NotFoundException } from '@nestjs/common';
-import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
-import { SnapshotsLoader } from './loaders/snapshots.loader';
+import { LatestEducationalContentSnapshotLoader } from './loaders/latest-educational-content-snapshot.loader';
+import { EducationalContentSnapshotsLoader } from './loaders/educational-content-snapshots.loader';
 
 @Resolver(() => EducationalContentOutput)
 export class EducationalContentResolver {
   constructor(
     private readonly educationalContentService: EducationalContentService,
-    private readonly latestSnapshotLoader: LatestSnapshotLoader,
-    private readonly snapshotsLoader: SnapshotsLoader,
+    private readonly latestSnapshotLoader: LatestEducationalContentSnapshotLoader,
+    private readonly snapshotsLoader: EducationalContentSnapshotsLoader,
   ) {}
 
   @Query(() => [EducationalContentOutput])

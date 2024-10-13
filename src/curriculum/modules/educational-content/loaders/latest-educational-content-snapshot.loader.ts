@@ -4,7 +4,7 @@ import { EducationalContentService } from '../educational-content.service';
 import { EducationalContentSnapshotEntity } from '../entities/educational-content-snapshot.entity';
 
 @Injectable()
-export class LatestSnapshotLoader extends DataLoader<
+export class LatestEducationalContentSnapshotLoader extends DataLoader<
   number,
   EducationalContentSnapshotEntity | null
 > {

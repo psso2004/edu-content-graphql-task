@@ -5,7 +5,7 @@ import { EducationalContentSnapshotEntity } from '../entities/educational-conten
 import { In } from 'typeorm';
 
 @Injectable()
-export class SnapshotsLoader extends DataLoader<
+export class EducationalContentSnapshotsLoader extends DataLoader<
   number,
   EducationalContentSnapshotEntity[]
 > {

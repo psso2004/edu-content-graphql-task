@@ -21,16 +21,16 @@ import { CurriculumService } from './curriculum.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { EducationalContentService } from './modules/educational-content/educational-content.service';
 import { EducationalContentSnapshotEntity } from './modules/educational-content/entities/educational-content-snapshot.entity';
-import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
-import { SnapshotsLoader } from './loaders/snapshots.loader';
+import { LatestCurriculumSnapshotLoader } from './loaders/latest-curriculum-snapshot.loader';
+import { CurriculumSnapshotsLoader } from './loaders/curriculum-snapshots.loader';
 
 @Resolver(() => CurriculumOutput)
 export class CurriculumResolver {
   constructor(
     private readonly curriculumService: CurriculumService,
     private readonly educationalContentService: EducationalContentService,
-    private readonly latestSnapshotLoader: LatestSnapshotLoader,
-    private readonly snapshotsLoader: SnapshotsLoader,
+    private readonly latestSnapshotLoader: LatestCurriculumSnapshotLoader,
+    private readonly snapshotsLoader: CurriculumSnapshotsLoader,
   ) {}
 
   @Query(() => [CurriculumOutput])

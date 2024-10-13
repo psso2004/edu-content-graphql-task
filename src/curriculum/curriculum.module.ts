@@ -7,8 +7,8 @@ import { CurriculumResolver } from './curriculum.resolver';
 import { CurriculumSnapshotResolver } from './curriculum-snapshot.resolver';
 import { EducationalContentModule } from './modules/educational-content/educational-content.module';
 import { CurriculumService } from './curriculum.service';
-import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
-import { SnapshotsLoader } from './loaders/snapshots.loader';
+import { LatestCurriculumSnapshotLoader } from './loaders/latest-curriculum-snapshot.loader';
+import { CurriculumSnapshotsLoader } from './loaders/curriculum-snapshots.loader';
 import { EducationalContentSnapshotsLoader } from './loaders/education-content-snapshots.loader';
 
 @Module({
@@ -33,8 +33,8 @@ import { EducationalContentSnapshotsLoader } from './loaders/education-content-s
     /**
      * === dataloaders ===
      */
-    LatestSnapshotLoader,
-    SnapshotsLoader,
+    LatestCurriculumSnapshotLoader,
+    CurriculumSnapshotsLoader,
     EducationalContentSnapshotsLoader,
   ],
 })

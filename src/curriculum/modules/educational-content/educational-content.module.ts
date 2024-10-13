@@ -4,8 +4,8 @@ import { EducationalContentEntity } from './entities/educational-content.entity'
 import { EducationalContentSnapshotEntity } from './entities/educational-content-snapshot.entity';
 import { EducationalContentResolver } from './educational-content.resolver';
 import { EducationalContentService } from './educational-content.service';
-import { LatestSnapshotLoader } from './loaders/latest-snapshot.loader';
-import { SnapshotsLoader } from './loaders/snapshots.loader';
+import { LatestEducationalContentSnapshotLoader } from './loaders/latest-educational-content-snapshot.loader';
+import { EducationalContentSnapshotsLoader } from './loaders/educational-content-snapshots.loader';
 
 @Module({
   imports: [
@@ -26,8 +26,8 @@ import { SnapshotsLoader } from './loaders/snapshots.loader';
     /**
      * === dataloaders ===
      */
-    LatestSnapshotLoader,
-    SnapshotsLoader,
+    LatestEducationalContentSnapshotLoader,
+    EducationalContentSnapshotsLoader,
   ],
   exports: [EducationalContentService],
 })

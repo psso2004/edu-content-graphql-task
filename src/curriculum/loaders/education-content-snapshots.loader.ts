@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { DataSource, In } from 'typeorm';
+import { In } from 'typeorm';
 import { EducationalContentSnapshotEntity } from '../modules/educational-content/entities/educational-content-snapshot.entity';
-import { CurriculumSnapshotEducationalContentSnapshotEntity } from '../entities/curriculum-snapshot-educational-content-snapshot.entity';
 import { CurriculumService } from '../curriculum.service';
 
 @Injectable()

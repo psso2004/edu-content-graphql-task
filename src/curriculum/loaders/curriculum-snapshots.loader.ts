@@ -5,7 +5,7 @@ import { CurriculumSnapshotEntity } from '../entities/curriculum-snapshot.entity
 import { CurriculumService } from '../curriculum.service';
 
 @Injectable()
-export class SnapshotsLoader extends DataLoader<
+export class CurriculumSnapshotsLoader extends DataLoader<
   number,
   CurriculumSnapshotEntity[]
 > {
