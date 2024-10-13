@@ -122,7 +122,14 @@ export class CurriculumResolver {
     @Args('input') input: DeleteCurriculumInput,
   ): Promise<boolean> {
     const { id } = input;
+
+    const curriculum = await this.curriculumService.getCurriculum({ id });
+    if (curriculum === null) {
+      throw new NotFoundException('curriculum not found');
+    }
+
     await this.curriculumService.deleteCurriculum(id);
+
     return true;
   }
 
