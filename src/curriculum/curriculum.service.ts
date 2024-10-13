@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { CurriculumEntity } from './entities/curriculum.entity';
 import { CurriculumSnapshotEntity } from './entities/curriculum-snapshot.entity';
+import { CurriculumSnapshotEducationalContentSnapshotEntity } from './entities/curriculum-snapshot-educational-content-snapshot.entity';
 
 @Injectable()
 export class CurriculumService {
@@ -59,6 +60,17 @@ export class CurriculumService {
           .getQuery()})`,
       )
       .getMany();
+  }
+
+  /**
+   * 커리큘럼으로 묶여진 교육콘텐츠 스냅샷 엔티티들을 조회합니다.
+   */
+  getEducationalContentSnapshots(
+    options: FindManyOptions<CurriculumSnapshotEducationalContentSnapshotEntity>,
+    entityManager?: EntityManager,
+  ): Promise<CurriculumSnapshotEducationalContentSnapshotEntity[]> {
+    const em = entityManager ?? this.dataSource.createEntityManager();
+    return em.find(CurriculumSnapshotEducationalContentSnapshotEntity, options);
   }
 
   createCurriculum(
