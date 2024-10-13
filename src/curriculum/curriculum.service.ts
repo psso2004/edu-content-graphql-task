@@ -105,7 +105,7 @@ export class CurriculumService {
         transactionalEntityManager,
       );
       if (!curriculum || curriculum === null) {
-        throw new NotFoundException('educationContent not found');
+        throw new NotFoundException('curriculum not found');
       }
 
       transactionalEntityManager.merge(
