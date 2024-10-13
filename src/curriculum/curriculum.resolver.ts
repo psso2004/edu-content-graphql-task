@@ -23,6 +23,7 @@ import { EducationalContentService } from './modules/educational-content/educati
 import { EducationalContentSnapshotEntity } from './modules/educational-content/entities/educational-content-snapshot.entity';
 import { LatestCurriculumSnapshotLoader } from './loaders/latest-curriculum-snapshot.loader';
 import { CurriculumSnapshotsLoader } from './loaders/curriculum-snapshots.loader';
+import { CurriculumPaginationOutput } from './dtos/outputs/curriculum-pagination.output';
 
 @Resolver(() => CurriculumOutput)
 export class CurriculumResolver {
@@ -33,18 +34,21 @@ export class CurriculumResolver {
     private readonly snapshotsLoader: CurriculumSnapshotsLoader,
   ) {}
 
-  @Query(() => [CurriculumOutput])
+  @Query(() => CurriculumPaginationOutput)
   async curriculums(
     @Args() args: CurriculumsArgs,
-  ): Promise<CurriculumOutput[]> {
+  ): Promise<CurriculumPaginationOutput> {
     const { page, limit } = args;
 
-    const curriculums = await this.curriculumService.getCurriculums({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    const [curriculums, totalCount] = await Promise.all([
+      this.curriculumService.getCurriculums({
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      this.curriculumService.getCurriculumCount(),
+    ]);
 
-    return curriculums.map((curriculum) => new CurriculumOutput(curriculum));
+    return new CurriculumPaginationOutput(curriculums, totalCount, page, limit);
   }
 
   @Query(() => CurriculumOutput, { nullable: true })

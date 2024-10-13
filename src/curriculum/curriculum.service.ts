@@ -36,6 +36,13 @@ export class CurriculumService {
     return em.find(CurriculumEntity, options);
   }
 
+  getCurriculumCount(
+    where: FindOptionsWhere<CurriculumEntity> = {},
+  ): Promise<number> {
+    const repo = this.dataSource.getRepository(CurriculumEntity);
+    return repo.countBy(where);
+  }
+
   getCurriculumSnapshots(
     options: FindManyOptions<CurriculumSnapshotEntity> = {},
     entityManager?: EntityManager,
