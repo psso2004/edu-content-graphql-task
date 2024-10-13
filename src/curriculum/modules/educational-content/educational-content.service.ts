@@ -35,6 +35,13 @@ export class EducationalContentService {
     return em.find(EducationalContentEntity, options);
   }
 
+  getEducationalContentCount(
+    where: FindOptionsWhere<EducationalContentEntity> = {},
+  ): Promise<number> {
+    const repo = this.dataSource.getRepository(EducationalContentEntity);
+    return repo.countBy(where);
+  }
+
   getEducationalContentSnapshots(
     options: FindManyOptions<EducationalContentSnapshotEntity> = {},
     entityManager?: EntityManager,

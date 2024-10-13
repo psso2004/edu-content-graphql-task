@@ -18,6 +18,7 @@ import { EducationalContentService } from './educational-content.service';
 import { NotFoundException } from '@nestjs/common';
 import { LatestEducationalContentSnapshotLoader } from './loaders/latest-educational-content-snapshot.loader';
 import { EducationalContentSnapshotsLoader } from './loaders/educational-content-snapshots.loader';
+import { EducationalContentPaginationOutput } from './dtos/outputs/educational-content-pagination.output';
 
 @Resolver(() => EducationalContentOutput)
 export class EducationalContentResolver {
@@ -27,23 +28,25 @@ export class EducationalContentResolver {
     private readonly snapshotsLoader: EducationalContentSnapshotsLoader,
   ) {}
 
-  @Query(() => [EducationalContentOutput])
+  @Query(() => EducationalContentPaginationOutput)
   async educationalContents(
     @Args() args: EducationalContentsArgs,
-  ): Promise<EducationalContentOutput[]> {
+  ): Promise<EducationalContentPaginationOutput> {
     const { page, limit } = args;
 
-    // todo: count 기능 추가해야됨.
-    const [educationalContents] = await Promise.all([
+    const [educationalContents, totalCount] = await Promise.all([
       this.educationalContentService.getEducationalContents({
         skip: (page - 1) * limit,
         take: limit,
       }),
+      this.educationalContentService.getEducationalContentCount(),
     ]);
 
-    // todo: paginated 객체로 반환하도록 수정해야됨.
-    return educationalContents.map(
-      (educationalContent) => new EducationalContentOutput(educationalContent),
+    return new EducationalContentPaginationOutput(
+      educationalContents,
+      totalCount,
+      page,
+      limit,
     );
   }
 
