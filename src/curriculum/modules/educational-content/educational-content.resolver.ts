@@ -96,7 +96,15 @@ export class EducationalContentResolver {
     @Args('input') input: DeleteEducationalContentInput,
   ): Promise<boolean> {
     const { id } = input;
+
+    const educationalContent =
+      await this.educationalContentService.getEducationalContent({ id });
+    if (educationalContent === null) {
+      throw new NotFoundException('educationContent not found');
+    }
+
     await this.educationalContentService.deleteEducationalContent(id);
+
     return true;
   }
 
