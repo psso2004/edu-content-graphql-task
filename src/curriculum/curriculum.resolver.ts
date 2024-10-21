@@ -16,7 +16,6 @@ import { CurriculumSnapshotOutput } from './dtos/outputs/curriculum-snapshot.out
 import { CurriculumSnapshotsArgs } from './dtos/args/curriculum-snapshots.args';
 import { CurriculumService } from './curriculum.service';
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { EducationalContentService } from './modules/educational-content/educational-content.service';
 import { EducationalContentSnapshotEntity } from './modules/educational-content/entities/educational-content-snapshot.entity';
 import { LatestCurriculumSnapshotLoader } from './loaders/latest-curriculum-snapshot.loader';
 import { CurriculumSnapshotsLoader } from './loaders/curriculum-snapshots.loader';
