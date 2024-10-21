@@ -18,12 +18,20 @@ import { DeleteCurriculumInput } from './dtos/inputs/delete-curriculum.input';
 import { CurriculumSnapshotOutput } from './dtos/outputs/curriculum-snapshot.output';
 import { CurriculumSnapshotsArgs } from './dtos/args/curriculum-snapshots.args';
 import { CurriculumService } from './curriculum.service';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { EducationalContentService } from './modules/educational-content/educational-content.service';
 import { EducationalContentSnapshotEntity } from './modules/educational-content/entities/educational-content-snapshot.entity';
 import { LatestCurriculumSnapshotLoader } from './loaders/latest-curriculum-snapshot.loader';
 import { CurriculumSnapshotsLoader } from './loaders/curriculum-snapshots.loader';
 import { CurriculumPaginationOutput } from './dtos/outputs/curriculum-pagination.output';
+import {
+  CurriculumGuard,
+  EducationalContentSnapshots,
+} from './curriculum.guard';
 
 @Resolver(() => CurriculumOutput)
 export class CurriculumResolver {
@@ -66,14 +74,15 @@ export class CurriculumResolver {
     return new CurriculumOutput(curriculum);
   }
 
+  @UseGuards(CurriculumGuard)
   @Mutation(() => CurriculumOutput)
   async createCurriculum(
     @Args('input') input: CreateCurriculumInput,
+    @EducationalContentSnapshots()
+    educationalContentSnapshots: EducationalContentSnapshotEntity[],
   ): Promise<CurriculumOutput> {
     const { educationalContents, ...filteredInput } = input;
-
-    const educationalContentSnapshots =
-      await this.getEducationalContentSnapshots(educationalContents);
+    educationalContents;
 
     const curriculum = await this.curriculumService.createCurriculum({
       curriculumSnapshots: [
@@ -91,14 +100,15 @@ export class CurriculumResolver {
     return new CurriculumOutput(curriculum);
   }
 
+  @UseGuards(CurriculumGuard)
   @Mutation(() => CurriculumOutput)
   async updateCurriculum(
     @Args('input') input: UpdateCurriculumInput,
+    @EducationalContentSnapshots()
+    educationalContentSnapshots: EducationalContentSnapshotEntity[],
   ): Promise<CurriculumOutput> {
     const { id, educationalContents, ...filteredInput } = input;
-
-    const educationalContentSnapshots =
-      await this.getEducationalContentSnapshots(educationalContents);
+    educationalContents;
 
     const curriculum = await this.curriculumService.updateCurriculum({
       id,
@@ -158,22 +168,5 @@ export class CurriculumResolver {
     }
 
     return convertedSnapshots;
-  }
-
-  private async getEducationalContentSnapshots(
-    educationalContents: CurriculumEducationalContentInput[],
-  ): Promise<EducationalContentSnapshotEntity[]> {
-    const educationalContentSnapshots =
-      await this.educationalContentService.getUniqueEducationalContentSnapshots(
-        educationalContents.map((educationalContent) => educationalContent.id),
-      );
-
-    if (educationalContentSnapshots.length <= 0) {
-      throw new BadRequestException(
-        'invalid educational content ids provided.',
-      );
-    }
-
-    return educationalContentSnapshots;
   }
 }
