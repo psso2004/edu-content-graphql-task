@@ -30,7 +30,6 @@ import {
 export class CurriculumResolver {
   constructor(
     private readonly curriculumService: CurriculumService,
-    private readonly educationalContentService: EducationalContentService,
     private readonly latestSnapshotLoader: LatestCurriculumSnapshotLoader,
     private readonly snapshotsLoader: CurriculumSnapshotsLoader,
   ) {}
