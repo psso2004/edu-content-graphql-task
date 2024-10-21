@@ -9,20 +9,13 @@ import {
 import { CurriculumOutput } from './dtos/outputs/curriculum.output';
 import { CurriculumsArgs } from './dtos/args/curriculums.args';
 import { CurriculumArgs } from './dtos/args/curriculum.args';
-import {
-  CreateCurriculumInput,
-  CurriculumEducationalContentInput,
-} from './dtos/inputs/create-curriculum.input';
+import { CreateCurriculumInput } from './dtos/inputs/create-curriculum.input';
 import { UpdateCurriculumInput } from './dtos/inputs/update-curriculum.input';
 import { DeleteCurriculumInput } from './dtos/inputs/delete-curriculum.input';
 import { CurriculumSnapshotOutput } from './dtos/outputs/curriculum-snapshot.output';
 import { CurriculumSnapshotsArgs } from './dtos/args/curriculum-snapshots.args';
 import { CurriculumService } from './curriculum.service';
-import {
-  BadRequestException,
-  NotFoundException,
-  UseGuards,
-} from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { EducationalContentService } from './modules/educational-content/educational-content.service';
 import { EducationalContentSnapshotEntity } from './modules/educational-content/entities/educational-content-snapshot.entity';
 import { LatestCurriculumSnapshotLoader } from './loaders/latest-curriculum-snapshot.loader';
